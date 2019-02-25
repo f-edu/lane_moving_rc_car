@@ -1,4 +1,3 @@
-import imutils
 import time
 from threading import Thread
 import cv2
@@ -55,7 +54,8 @@ class WebcamVideoStream:
 port = "5556"
 context = zmq.Context()
 socket = context.socket(zmq.PAIR)
-socket.bind("tcp://*:%s" % port)
+# socket.bind("tcp://*:%s" % port)
+socket.connect("tcp://192.168.31.172:%s" % port)
 
 # Камера
 src = 1
@@ -87,14 +87,16 @@ while True:
 
     # socket.send_pyobj(buffer)
     socket.send(jpg_as_text)
-    angle = socket.recv()
-    print(int(angle))
+    angle = int(socket.recv())
+    print(angle)
 
     # </editor-fold>
 
 
 
     # <editor-fold desc="вычисление необходимого ускорения">
+    # ускорение от -50 до 50, среднее - 0,
+    # скорость меняется от 1450 до 1350, среднее - 1400
     speed = 1500
 
     # </editor-fold>
